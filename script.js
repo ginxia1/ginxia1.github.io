@@ -39,11 +39,48 @@ document.querySelectorAll('.faq-q').forEach(q=>{
 /* ---- toast ---- */
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200)}
 
-/* ---- inquiry form: copy + go discord ---- */
-document.getElementById('inquiryForm').addEventListener('submit',function(e){
+/* ---- inquiry form: send to email(Web3Forms) + Discord(webhook) ---- */
+const ACCESS_KEY="83ea7841-dad0-4b3e-9333-62edff1365a3"; // web3forms.com 액세스 키 (수신 이메일은 이 키에 묶여 있음)
+const DISCORD_WEBHOOK_B64="aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTUzMDE1NjczMzIzMjU3ODgxMi9JWlAzcFdfOHRKUnNnUjN1aW5oeGxyX2N1eWhRell1MldTb01QY1RodHRaRlRwaXNHMjg2WjY4Q2xaX0tTYXdTb25nVw==";  // 디스코드 웹훅(base64, 자동무효화 회피). 나중에 코치님 비공개 채널 웹훅으로 교체
+const _set=v=>v && v.indexOf('__')!==0;
+document.getElementById('inquiryForm').addEventListener('submit',async function(e){
   e.preventDefault();
   const f=e.target;
-  const txt=`[킹백수 코칭 문의]\n소환사명: ${f.nick.value}\n현재 티어: ${f.tier.value}\n주 포지션: ${f.line.value}\n관심 강의: ${f.course.value||'-'}\n남기실 말씀: ${f.msg.value||'-'}`;
-  const go=()=>{toast('문의 내용이 복사되었습니다! 디스코드에서 붙여넣어 주세요 📋');setTimeout(()=>window.open('https://discord.gg/FBeMPmdpPq','_blank'),700)};
-  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(go).catch(go)}else{go()}
+  if(f.botcheck && f.botcheck.checked) return; // 허니팟: 봇이면 조용히 중단
+  const btn=f.querySelector('button[type="submit"]');
+  const label=btn.textContent;
+  const v={nick:f.nick.value,tier:f.tier.value,line:f.line.value,course:f.course.value||'-',msg:f.msg.value||'-'};
+  const summary=`[킹백수 코칭 문의]\n소환사명: ${v.nick}\n현재 티어: ${v.tier}\n주 포지션: ${v.line}\n관심 강의: ${v.course}\n남기실 말씀: ${v.msg}`;
+  const openDiscord=()=>setTimeout(()=>window.open('https://discord.gg/FBeMPmdpPq','_blank'),800);
+  const fallback=()=>{ // 전송 실패/미설정 시 안전망: 복사 + 디스코드
+    const done=()=>{toast('전송에 문제가 있어 내용을 복사했습니다. 디스코드에 붙여넣어 주세요 📋');openDiscord();};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(summary).then(done).catch(done);}else{done();}
+  };
+  async function sendEmail(){
+    if(!_set(ACCESS_KEY))return false;
+    try{
+      const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
+        body:JSON.stringify({access_key:ACCESS_KEY,subject:'🎮 킹백수 코칭 새 문의',from_name:'킹백수 코칭 사이트','소환사명':v.nick,'현재 티어':v.tier,'주 포지션':v.line,'관심 강의':v.course,'남기실 말씀':v.msg})});
+      const d=await r.json().catch(()=>({}));
+      return r.ok&&d.success;
+    }catch(err){return false;}
+  }
+  async function sendDiscord(){
+    if(!_set(DISCORD_WEBHOOK_B64))return false;
+    let url; try{url=atob(DISCORD_WEBHOOK_B64);}catch(err){return false;}
+    try{
+      const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({embeds:[{title:'🎮 킹백수 코칭 새 문의',color:0xc8aa6e,fields:[
+          {name:'소환사명',value:v.nick||'-',inline:true},{name:'현재 티어',value:v.tier||'-',inline:true},{name:'주 포지션',value:v.line||'-',inline:true},
+          {name:'관심 강의',value:v.course},{name:'남기실 말씀',value:v.msg}],timestamp:new Date().toISOString()}]})});
+      return r.ok;
+    }catch(err){return false;}
+  }
+  if(!_set(ACCESS_KEY)&&!_set(DISCORD_WEBHOOK_B64)){fallback();return;} // 둘 다 미설정
+  btn.disabled=true; btn.textContent='전송 중…';
+  try{
+    const [emailOk,discordOk]=await Promise.all([sendEmail(),sendDiscord()]);
+    if(emailOk||discordOk){toast('문의가 정상 접수되었습니다! 🙌 곧 연락드릴게요');f.reset();openDiscord();}
+    else{fallback();}
+  }finally{btn.disabled=false;btn.textContent=label;}
 });

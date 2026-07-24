@@ -290,6 +290,7 @@ section{padding:96px 0;position:relative}
 .form .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:480px){.form .row{grid-template-columns:1fr}}
 .form-note{font-size:.8rem;color:var(--text-dim);margin-top:10px;text-align:center}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
 .toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(120px);
   background:var(--panel);border:1px solid var(--gold);color:var(--white);padding:14px 24px;border-radius:12px;
   box-shadow:0 10px 40px rgba(0,0,0,.5);transition:.35s;z-index:100;font-size:.92rem;max-width:90vw;text-align:center}
