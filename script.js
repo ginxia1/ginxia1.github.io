@@ -49,8 +49,8 @@ document.getElementById('inquiryForm').addEventListener('submit',async function(
   if(f.botcheck && f.botcheck.checked) return; // 허니팟: 봇이면 조용히 중단
   const btn=f.querySelector('button[type="submit"]');
   const label=btn.textContent;
-  const v={nick:f.nick.value,tier:f.tier.value,line:f.line.value,course:f.course.value||'-',msg:f.msg.value||'-'};
-  const summary=`[킹백수 코칭 문의]\n소환사명: ${v.nick}\n현재 티어: ${v.tier}\n주 포지션: ${v.line}\n관심 강의: ${v.course}\n남기실 말씀: ${v.msg}`;
+  const v={nick:f.nick.value,discord:(f.discord?f.discord.value:'')||'-',tier:f.tier.value,line:f.line.value,course:f.course.value||'-',msg:f.msg.value||'-'};
+  const summary=`[킹백수 코칭 문의]\n소환사명: ${v.nick}\n디스코드: ${v.discord}\n현재 티어: ${v.tier}\n주 포지션: ${v.line}\n관심 강의: ${v.course}\n남기실 말씀: ${v.msg}`;
   const openDiscord=()=>setTimeout(()=>window.open('https://discord.gg/FBeMPmdpPq','_blank'),800);
   const fallback=()=>{ // 전송 실패/미설정 시 안전망: 복사 + 디스코드
     const done=()=>{toast('전송에 문제가 있어 내용을 복사했습니다. 디스코드에 붙여넣어 주세요 📋');openDiscord();};
@@ -60,7 +60,7 @@ document.getElementById('inquiryForm').addEventListener('submit',async function(
     if(!_set(ACCESS_KEY))return false;
     try{
       const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
-        body:JSON.stringify({access_key:ACCESS_KEY,subject:'🎮 킹백수 코칭 새 문의',from_name:'킹백수 코칭 사이트','소환사명':v.nick,'현재 티어':v.tier,'주 포지션':v.line,'관심 강의':v.course,'남기실 말씀':v.msg})});
+        body:JSON.stringify({access_key:ACCESS_KEY,subject:'🎮 킹백수 코칭 새 문의',from_name:'킹백수 코칭 사이트','소환사명':v.nick,'디스코드 닉네임':v.discord,'현재 티어':v.tier,'주 포지션':v.line,'관심 강의':v.course,'남기실 말씀':v.msg})});
       const d=await r.json().catch(()=>({}));
       return r.ok&&d.success;
     }catch(err){return false;}
@@ -71,7 +71,7 @@ document.getElementById('inquiryForm').addEventListener('submit',async function(
     try{
       const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({embeds:[{title:'🎮 킹백수 코칭 새 문의',color:0xc8aa6e,fields:[
-          {name:'소환사명',value:v.nick||'-',inline:true},{name:'현재 티어',value:v.tier||'-',inline:true},{name:'주 포지션',value:v.line||'-',inline:true},
+          {name:'소환사명',value:v.nick||'-',inline:true},{name:'디스코드',value:v.discord||'-',inline:true},{name:'현재 티어',value:v.tier||'-',inline:true},{name:'주 포지션',value:v.line||'-',inline:true},
           {name:'관심 강의',value:v.course},{name:'남기실 말씀',value:v.msg}],timestamp:new Date().toISOString()}]})});
       return r.ok;
     }catch(err){return false;}
