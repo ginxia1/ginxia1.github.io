@@ -14,18 +14,42 @@ const cio=new IntersectionObserver((es)=>{es.forEach(e=>{
 })},{threshold:.5});
 document.querySelectorAll('[data-count]').forEach(el=>{if(!el.querySelector('.plus'))el.textContent='0';cio.observe(el)});
 
-/* ---- lightbox (click screenshot to enlarge) ---- */
+/* ---- lightbox: 스크린샷 확대 + 유튜브 재생 ---- */
 const lb=document.createElement('div');
 lb.className='lb';
-lb.innerHTML='<span class="x">&times;</span><img alt="확대 이미지">';
+lb.innerHTML='<span class="x">&times;</span><img alt="확대 이미지"><div class="lb-video"></div>';
 document.body.appendChild(lb);
 const lbImg=lb.querySelector('img');
+const lbVideo=lb.querySelector('.lb-video');
+
+function closeLb(){
+  lb.classList.remove('on');
+  lbVideo.classList.remove('on');
+  lbVideo.innerHTML='';           // iframe 제거 — 닫은 뒤 소리가 계속 나는 것 방지
+  lbImg.style.display='';
+}
+function openImage(src){
+  lbVideo.classList.remove('on'); lbVideo.innerHTML='';
+  lbImg.style.display=''; lbImg.src=src;
+  lb.classList.add('on');
+}
+function openVideo(id){
+  if(!/^[A-Za-z0-9_-]{5,20}$/.test(id))return;
+  lbImg.style.display='none'; lbImg.removeAttribute('src');
+  lbVideo.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0" title="유튜브 영상"'
+    +' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+  lbVideo.classList.add('on');
+  lb.classList.add('on');
+}
+
 document.addEventListener('click',(e)=>{
+  const yt=e.target.closest('.ytpill[data-yt]');
+  if(yt){openVideo(yt.dataset.yt);return;}
   const shot=e.target.closest('.jshot,.tshot,.wshot,.sched-img img');
-  if(shot){lbImg.src=shot.src;lb.classList.add('on');return;}
-  if(e.target.closest('.lb'))lb.classList.remove('on');
+  if(shot){openImage(shot.src);return;}
+  if(e.target.closest('.lb'))closeLb();
 });
-document.addEventListener('keydown',(e)=>{if(e.key==='Escape')lb.classList.remove('on')});
+document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeLb()});
 
 /* ---- FAQ ---- */
 document.querySelectorAll('.faq-q').forEach(q=>{
