@@ -104,6 +104,8 @@ section{padding:96px 0;position:relative}
 
 /* ---------- hero ---------- */
 .hero{padding:64px 0 44px;text-align:center;position:relative}
+/* 포트폴리오(성과)가 첫 섹션 — 상단 여백 축소 */
+#proof{padding-top:44px}
 .hero .badge-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
 .chip{
   font-size:.82rem;font-weight:600;color:var(--gold-bright);
