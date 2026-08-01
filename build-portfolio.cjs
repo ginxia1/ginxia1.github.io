@@ -10,8 +10,20 @@ const slice = (from, to) => {
   return src.slice(s, e).trimEnd();
 };
 
-const proof = slice('<!-- PROOF -->', '<!-- STATS');
-const stats = slice('<!-- STATS', '<!-- PRICING -->');
+let proof = slice('<!-- PROOF -->', '<!-- STATS');
+let stats = slice('<!-- STATS', '<!-- PRICING -->');
+
+/* 포트폴리오 전용 조정
+   - 리드 문구(수강생 대상 설명)는 제외
+   - 긱스 실적 배지는 떼어내 페이지 맨 아래로 이동 */
+proof = proof.replace(/[ \t]*<p class="lead">[\s\S]*?<\/p>\r?\n?/, '');
+const claim = (proof.match(/<div class="claim">[\s\S]*?<\/div>/) || [''])[0];
+proof = proof.replace(/[ \t]*<div class="claim">[\s\S]*?<\/div>\r?\n?/, '');
+if (!claim) throw new Error('긱스 배지(.claim)를 찾지 못함');
+
+/* 긱스 배지를 성과 숫자와 한 덩어리로 — 주장 위, 뒷받침 숫자 아래 */
+stats = stats.replace('<div class="stat-grid">', `<div class="claim-row">${claim}</div>\n    <div class="stat-grid">`);
+if (!stats.includes('claim-row')) throw new Error('stat-grid를 찾지 못해 배지를 넣지 못함');
 const ver = (src.match(/style\.css\?v=(\d+)/) || [, '1'])[1];
 const BASE = 'https://ginxia1.github.io';
 
