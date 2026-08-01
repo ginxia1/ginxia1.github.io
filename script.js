@@ -67,7 +67,8 @@ function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t
 const ACCESS_KEY="83ea7841-dad0-4b3e-9333-62edff1365a3"; // web3forms.com 액세스 키 (수신 이메일은 이 키에 묶여 있음)
 const DISCORD_WEBHOOK_B64="aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTUzMDE1NjczMzIzMjU3ODgxMi9JWlAzcFdfOHRKUnNnUjN1aW5oeGxyX2N1eWhRell1MldTb01QY1RodHRaRlRwaXNHMjg2WjY4Q2xaX0tTYXdTb25nVw==";  // 디스코드 웹훅(base64, 자동무효화 회피). 나중에 코치님 비공개 채널 웹훅으로 교체
 const _set=v=>v && v.indexOf('__')!==0;
-document.getElementById('inquiryForm').addEventListener('submit',async function(e){
+const inquiryForm=document.getElementById('inquiryForm');
+if(inquiryForm) inquiryForm.addEventListener('submit',async function(e){
   e.preventDefault();
   const f=e.target;
   if(f.botcheck && f.botcheck.checked) return; // 허니팟: 봇이면 조용히 중단
