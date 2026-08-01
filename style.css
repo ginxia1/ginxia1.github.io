@@ -361,20 +361,35 @@ footer{border-top:1px solid var(--line);padding:40px 0;color:var(--text-dim);fon
 .kpoint .kt{color:var(--white);font-weight:700;font-size:1rem;margin-top:4px}
 .kpoint .kd{color:var(--text-dim);font-size:.87rem;margin-top:6px;line-height:1.55}
 
-/* 대회 진행 경로 요약 */
-.kpath{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:center;margin-top:16px}
-.kp-step{font-size:.86rem;color:var(--text);border:1px solid var(--line);background:var(--bg-2);
-  border-radius:20px;padding:7px 15px;white-space:nowrap}
-.kp-step b{margin-left:6px}
-.kp-step.win{border-color:var(--gold-deep);color:var(--gold-bright)}
-.kp-step.win b{color:var(--teal)}
-.kp-step.lose{opacity:.72}
-.kp-step.lose b{color:var(--danger)}
-.kp-arr{color:var(--gold);font-weight:700}
-/* 3장짜리 근거 그리드 */
+/* 순위 비교 — 결과만 직관적으로 */
+.rank-compare{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+.rc-row{display:grid;grid-template-columns:62px 1fr auto;align-items:center;gap:14px;
+  background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:15px 18px}
+.rc-row.us{border-color:var(--gold);
+  background:linear-gradient(90deg,rgba(200,170,110,.16),var(--bg-2) 62%);
+  box-shadow:0 0 34px rgba(200,170,110,.13)}
+.rc-pos{font-family:'Cinzel',serif;font-size:1.2rem;font-weight:900;color:var(--text-dim)}
+.rc-row.us .rc-pos{color:var(--gold-bright)}
+.rc-team{color:var(--white);font-weight:700;font-size:1.06rem}
+.rc-team em{font-style:normal;font-size:.72rem;color:#0b0f14;background:var(--gold);
+  padding:3px 9px;border-radius:12px;margin-left:9px;font-weight:800;vertical-align:middle}
+.rc-tier{font-family:'Cinzel',serif;font-size:.8rem;font-weight:700;letter-spacing:.5px;
+  padding:6px 13px;border-radius:20px;white-space:nowrap}
+.rc-tier.chal{color:#7fd8ff;background:rgba(80,180,255,.12);border:1px solid rgba(80,180,255,.36)}
+.rc-tier.mast{color:#d9a6ff;background:rgba(190,120,255,.14);border:1px solid rgba(190,120,255,.42)}
+@media(max-width:600px){
+  .rc-row{grid-template-columns:44px 1fr;row-gap:9px;padding:13px 15px}
+  .rc-tier{grid-column:2}
+  .rc-team{font-size:.98rem}
+}
+
+/* 근거 그리드 (2·3장) */
 .journey.j3{grid-template-columns:repeat(3,1fr)}
+.journey.j2{grid-template-columns:repeat(2,1fr)}
+/* 증빙 2장은 잘리지 않게 전체 표시 */
+.journey.j2 .jshot{height:200px;object-fit:contain;object-position:center;padding:10px}
 @media(max-width:900px){.journey.j3{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:520px){.journey.j3{grid-template-columns:1fr}}
+@media(max-width:520px){.journey.j3,.journey.j2{grid-template-columns:1fr}}
 
 /* ========== PROOF: testimonial cards (챌린저/그마) ========== */
 .subhead{display:flex;align-items:center;gap:12px;margin:0 0 24px}
