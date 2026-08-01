@@ -45,7 +45,7 @@ function openVideo(id){
 document.addEventListener('click',(e)=>{
   const yt=e.target.closest('.ytpill[data-yt]');
   if(yt){openVideo(yt.dataset.yt);return;}
-  const shot=e.target.closest('.jshot,.tshot,.wshot,.sched-img img');
+  const shot=e.target.closest('.jshot,.tshot,.wshot,.spot-hero img,.sched-img img');
   if(shot){openImage(shot.src);return;}
   if(e.target.closest('.lb'))closeLb();
 });

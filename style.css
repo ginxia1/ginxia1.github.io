@@ -346,6 +346,21 @@ footer{border-top:1px solid var(--line);padding:40px 0;color:var(--text-dim);fon
 .sbadge{font-size:.78rem;font-weight:700;color:var(--gold-bright);border:1px solid var(--gold-deep);
   background:rgba(200,170,110,.08);padding:6px 13px;border-radius:20px}
 
+/* 대표 이미지(순위표 등) + 캡션 */
+.spot-hero{margin:24px 0 4px}
+.spot-hero img{width:100%;display:block;border-radius:12px;border:1px solid var(--line);cursor:zoom-in;background:#05080c}
+.spot-cap{color:var(--text-dim);font-size:.85rem;margin-top:10px;text-align:center}
+.spot-cap b{color:var(--gold-bright)}
+
+/* 밴픽 설계 3포인트 (텍스트 카드) */
+.kpoints{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+@media(max-width:820px){.kpoints{grid-template-columns:1fr}}
+.kpoint{background:var(--bg-2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:10px;padding:16px 18px}
+.kpoint .kn{font-family:'Cinzel',serif;color:var(--gold);font-size:.72rem;font-weight:700;letter-spacing:1.5px}
+.kpoint .kt{color:var(--white);font-weight:700;font-size:1rem;margin-top:4px}
+.kpoint .kd{color:var(--text-dim);font-size:.87rem;margin-top:6px;line-height:1.55}
+
 /* ========== PROOF: testimonial cards (챌린저/그마) ========== */
 .subhead{display:flex;align-items:center;gap:12px;margin:0 0 24px}
 .subhead h3{font-size:clamp(1.2rem,2.4vw,1.55rem);color:var(--white);font-weight:800;white-space:nowrap}
