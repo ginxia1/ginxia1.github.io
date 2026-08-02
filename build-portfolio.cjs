@@ -25,6 +25,12 @@ const claim = (proof.match(/<div class="claim">[\s\S]*?<\/div>/) || [''])[0];
 proof = proof.replace(/[ \t]*<div class="claim">[\s\S]*?<\/div>\r?\n?/, '');
 if (!claim) throw new Error('긱스 배지(.claim)를 찾지 못함');
 
+/* 프로씬 활동명 '체크메이트' 반영.
+   단, 수강생 리뷰 원문("킹백수님 …")은 실제 발언이므로 그대로 둔다. */
+const rename = s => s.replace(/킹백수(?!님)/g, '체크메이트');
+proof = rename(proof);
+stats = rename(stats);
+
 /* 긱스 배지를 성과 숫자와 한 덩어리로 — 주장 위, 뒷받침 숫자 아래 */
 stats = stats.replace('<div class="stat-grid">', `<div class="claim-row">${claim}</div>\n    <div class="stat-grid">`);
 if (!stats.includes('claim-row')) throw new Error('stat-grid를 찾지 못해 배지를 넣지 못함');
@@ -36,12 +42,12 @@ const html = `<!DOCTYPE html>
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>킹백수 코치 · 포트폴리오</title>
-<meta name="description" content="킹백수 코치 포트폴리오 — 수강생 티어 상승 인증과 KEG 서울대표 선발전 준우승 등 대회 성과." />
-<meta property="og:title" content="킹백수 코치 · 포트폴리오" />
+<title>체크메이트 코치 · 포트폴리오</title>
+<meta name="description" content="체크메이트 코치 포트폴리오 — 수강생 티어 상승 인증과 KEG 서울대표 선발전 준우승 등 대회 성과." />
+<meta property="og:title" content="체크메이트 코치 · 포트폴리오" />
 <meta property="og:description" content="수강생 성과 인증과 대회 실적을 한 페이지에 정리했습니다." />
 <meta property="og:type" content="website" />
-<meta property="og:site_name" content="킹백수 LoL 코칭" />
+<meta property="og:site_name" content="체크메이트 LoL 코칭" />
 <meta property="og:locale" content="ko_KR" />
 <meta property="og:url" content="${BASE}/portfolio.html" />
 <meta property="og:image" content="${BASE}/images/og-cover.png" />
@@ -60,7 +66,7 @@ const html = `<!DOCTYPE html>
 <!-- NAV -->
 <header class="nav">
   <div class="wrap nav-inner">
-    <a href="#top" class="brand"><span class="mark">K</span><b>킹백수 <span style="color:var(--text-dim);font-weight:500">포트폴리오</span></b></a>
+    <a href="#top" class="brand"><span class="mark">C</span><b>체크메이트 <span style="color:var(--text-dim);font-weight:500">포트폴리오</span></b></a>
   </div>
 </header>
 
@@ -71,7 +77,7 @@ ${stats}
 <!-- FOOTER -->
 <footer>
   <div class="wrap foot-inner">
-    <div>© 2026 킹백수 LoL 코칭. All rights reserved.</div>
+    <div>© 2026 체크메이트 LoL 코칭. All rights reserved.</div>
   </div>
 </footer>
 
