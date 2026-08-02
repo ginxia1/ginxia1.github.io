@@ -11,7 +11,11 @@ const slice = (from, to) => {
 };
 
 let proof = slice('<!-- PROOF -->', '<!-- STATS');
-let stats = slice('<!-- STATS', '<!-- PRICING -->');
+/* STATS 뒤에 오는 섹션은 index.html 구성에 따라 달라지므로 먼저 나오는 경계를 사용 */
+const statsEnd = ['<!-- PRICING -->', '<!-- FOOTER -->']
+  .map(m => src.indexOf(m)).filter(i => i > src.indexOf('<!-- STATS')).sort((a, b) => a - b)[0];
+if (statsEnd == null) throw new Error('STATS 구간의 끝을 찾지 못함');
+let stats = src.slice(src.indexOf('<!-- STATS'), statsEnd).trimEnd();
 
 /* 포트폴리오 전용 조정
    - 리드 문구(수강생 대상 설명)는 제외
