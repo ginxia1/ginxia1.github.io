@@ -345,6 +345,8 @@ footer{border-top:1px solid var(--line);padding:40px 0;color:var(--text-dim);fon
 .spot-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
 .sbadge{font-size:.78rem;font-weight:700;color:var(--gold-bright);border:1px solid var(--gold-deep);
   background:rgba(200,170,110,.08);padding:6px 13px;border-radius:20px}
+/* 배지 안 등수 병기 */
+.sbadge i{font-style:normal;font-weight:600;color:var(--teal);margin-left:5px}
 
 /* 대표 이미지(순위표 등) + 캡션 */
 .spot-hero{margin:24px 0 4px}
@@ -371,14 +373,19 @@ footer{border-top:1px solid var(--line);padding:40px 0;color:var(--text-dim);fon
 .rc-row.us{opacity:1;border-color:var(--gold);border-width:2px;padding:21px 18px;
   background:linear-gradient(90deg,rgba(200,170,110,.2),var(--bg-2) 62%);
   box-shadow:0 0 44px rgba(200,170,110,.2)}
-.rc-row.us .rc-tier{font-size:.92rem;font-weight:800;padding:8px 16px}
+.rc-row.us .rc-tier{padding:10px 18px}
+.rc-row.us .rc-tier b{font-size:1.22rem}
+.rc-row.us .rc-tier i{font-size:.84rem;opacity:1}
 .rc-pos{font-family:'Cinzel',serif;font-size:1.2rem;font-weight:900;color:var(--text-dim)}
 .rc-row.us .rc-pos{color:var(--gold-bright)}
 .rc-team{color:var(--white);font-weight:700;font-size:1.06rem}
 .rc-team em{font-style:normal;font-size:.72rem;color:#0b0f14;background:var(--gold);
   padding:3px 9px;border-radius:12px;margin-left:9px;font-weight:800;vertical-align:middle}
-.rc-tier{font-size:.83rem;font-weight:700;letter-spacing:0;
-  padding:6px 13px;border-radius:20px;white-space:nowrap}
+/* 티어명(크게) + 등수(아래) 2줄 표기 — 둘 다 어필 */
+.rc-tier{display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:8px 16px;border-radius:14px;white-space:nowrap;text-align:center}
+.rc-tier b{font-size:1.06rem;font-weight:800;letter-spacing:-.2px}
+.rc-tier i{font-style:normal;font-size:.78rem;font-weight:600;opacity:.9}
 .rc-tier.chal{color:#7fd8ff;background:rgba(80,180,255,.12);border:1px solid rgba(80,180,255,.36)}
 .rc-tier.mast{color:#d9a6ff;background:rgba(190,120,255,.14);border:1px solid rgba(190,120,255,.42)}
 @media(max-width:600px){
